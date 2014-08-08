@@ -1,0 +1,9 @@
+###
+# My common setup for makefile when compiling
+# with fltk
+##
+
+CXX = g++
+CXXFLAGS = -DUSE_OPENGL32 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -Wall -I/usr/local/include -I.
+LIBS = -L/usr/local/lib -lfltk_forms -lfltk_images -lfltk_png -lfltk_jpeg -lfltk_gl -lfltk -lXext -lX11 -lm -ldl
+

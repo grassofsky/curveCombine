@@ -1,0 +1,150 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0302 
+header_name {.h} 
+code_name {.cpp}
+class CurveCombineUI {open
+} {
+  Function {CurveCombineUI()} {open
+  } {
+    Fl_Window mainWindow {open
+      xywh {-32000 -32000 799 510} type Double hide
+    } {
+      Fl_Tree tree {
+        callback {Mytree* tree = ((Mytree *)o);
+std::string tmpFilename, clickedFilename;
+Fl_Tree_Item *clickedItem = (Fl_Tree_Item*)tree->callback_item();
+clickedFilename = const_cast<char*>(clickedItem->label());
+int i = 0;
+if (tree->callback_reason() == FL_TREE_REASON_SELECTED) {
+  for (Fl_Tree_Item *item = tree->first(); item && i < 7; item = tree->next(item), ++i)
+  {
+    tmpFilename = const_cast<char*>(item->label());
+    if (clickedFilename == tmpFilename) {
+    	tree->whichClicked = i-1;
+    	plotBox->redraw();
+    }
+  }
+}}
+        xywh {10 10 640 85}
+        code0 {\#include "mytree.h"}
+        code1 {\#include <string>}
+        class Mytree
+      }
+      Fl_Box plotBox {
+        xywh {40 100 610 360} box FLAT_BOX color 7 selection_color 7
+        code0 {\#include "plotBox.h"}
+        class PlotBox
+      }
+      Fl_Button btnClear {
+        label {Clear All}
+        callback {plotBox->iniValues();
+tree->clear();
+tree->redraw();
+plotBox->redraw();}
+        xywh {660 15 60 25}
+      }
+      Fl_Box {} {
+        label Left
+        xywh {655 49 30 16} box FLAT_BOX
+      }
+      Fl_Box {} {
+        label Cross selected
+        xywh {647 74 45 16} box FLAT_BOX hide deactivate
+      }
+      Fl_Box {} {
+        label Right
+        xywh {655 98 30 16} box FLAT_BOX
+      }
+      Fl_Input edtXLeft {
+        xywh {690 45 50 23} type Float
+      }
+      Fl_Input edtYLeft {
+        xywh {745 45 50 23} type Float
+      }
+      Fl_Input edtXCross {
+        xywh {690 70 50 23} type Float hide deactivate
+      }
+      Fl_Input edtYCross {
+        xywh {745 70 50 23} type Float hide deactivate
+      }
+      Fl_Input edtXRight {
+        xywh {690 94 50 23} type Float
+      }
+      Fl_Input edtYRight {
+        xywh {745 94 50 23} type Float
+      }
+      Fl_Button btnExe {
+        label Exe
+        callback {plotBox->addLines();
+plotBox->redraw();}
+        xywh {660 120 60 25}
+      }
+      Fl_Button btnReset {
+        label Reset
+        callback {edtXLeft->value("");
+edtYLeft->value("");
+edtXCross->value("");
+edtYCross->value("");
+edtXRight->value("");
+edtYRight->value("");
+plotBox->resetValues();
+plotBox->redraw();}
+        xywh {725 120 60 25}
+      }
+      Fl_Box {} {
+        label YLim
+        xywh {660 179 30 16} box FLAT_BOX
+      }
+      Fl_Input edtYLow {
+        callback {plotBox->yLimitChanged = true;
+plotBox->redraw();}
+        xywh {696 177 45 23} type Float
+        code0 {edtYLow->value("-50");}
+      }
+      Fl_Input edtYHigh {
+        callback {plotBox->yLimitChanged = true;
+plotBox->redraw();}
+        xywh {746 177 45 23} type Float
+        code0 {edtYHigh->value("-10");}
+      }
+      Fl_Button btnYLim {
+        label {Set YLim}
+        xywh {660 205 60 25}
+      }
+      Fl_Value_Slider sldX {
+        label x
+        callback {plotBox->moveX(o->value());
+plotBox->redraw();}
+        xywh {40 470 610 25} type Horizontal textsize 14 deactivate
+      }
+      Fl_Value_Slider sldY {
+        label Y
+        callback {plotBox->moveY(-(o->value()));
+plotBox->redraw();}
+        xywh {10 105 25 355} textsize 14 deactivate
+      }
+      Fl_Button btnSave {
+        label Save
+        callback {Fl_Native_File_Chooser fnfc;
+fnfc.title("Save File As");
+fnfc.filter("CSV file\\t*.csv\\n");
+fnfc.type(Fl_Native_File_Chooser::BROWSE_SAVE_FILE);
+switch (fnfc.show()) {
+  case -1: printf("ERROR: %s\\n", fnfc.errmsg()); break;
+  case 1: printf("CANCEL\\n"); break;
+  default: plotBox->saveResult(fnfc.filename());
+}}
+        xywh {660 250 60 25}
+        code0 {\#include <FL/Fl_Native_File_Chooser.h>}
+      }
+      Fl_Box bxXY {
+        label {x,y}
+        xywh {660 474 80 16} hide
+      }
+    }
+  }
+  Function {show(int argc, char **argv)} {open
+  } {
+    code {mainWindow->show(argc, argv);} {}
+  }
+} 
